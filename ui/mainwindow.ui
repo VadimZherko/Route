@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::NoContextMenu</enum>
+  </property>
+  <property name="windowTitle">
+   <string>MarkUp</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../img/img.qrc">
+    <normaloff>:/new/prefix1/logoMarkUp.png</normaloff>:/new/prefix1/logoMarkUp.png</iconset>
+  </property>
+  <property name="toolTipDuration">
+   <number>1</number>
+  </property>
+  <property name="statusTip">
+   <string/>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: #1e1e2e; /* Тёмно-синий фон */
+color: #ffffff; /* Белый цвет текста */
+selection-background-color: #ff9800;</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QGraphicsView" name="workArea">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>650</width>
+      <height>600</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>650</width>
+      <height>600</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>10000</width>
+      <height>1000000</height>
+     </size>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">/* QGraphicsView */
+QGraphicsView {
+    background-color: #1e1e2e; /* Тёмно-синий фон */
+    border: 2px solid #3e3e5e; /* Тёмная граница */
+    border-radius: 5px;
+}
+
+/* Полосы прокрутки в QGraphicsView */
+QGraphicsView QScrollBar:vertical {
+    background: #2e2e3e;
+    width: 15px;
+    margin: 0px;
+}
+
+QGraphicsView QScrollBar::handle:vertical {
+    background: #555555;
+    min-height: 20px;
+    border-radius: 7px;
+}
+
+QGraphicsView QScrollBar::add-line:vertical,
+QGraphicsView QScrollBar::sub-line:vertical {
+    background: #2e2e3e;
+    height: 0px;
+}
+
+QGraphicsView QScrollBar::add-page:vertical,
+QGraphicsView QScrollBar::sub-page:vertical {
+    background: none;
+}
+
+QGraphicsView QScrollBar:horizontal {
+    background: #2e2e3e;
+    height: 15px;
+    margin: 0px;
+}
+
+QGraphicsView QScrollBar::handle:horizontal {
+    background: #555555;
+    min-width: 20px;
+    border-radius: 7px;
+}
+
+QGraphicsView QScrollBar::add-line:horizontal,
+QGraphicsView QScrollBar::sub-line:horizontal {
+    background: #2e2e3e;
+    width: 0px;
+}
+
+QGraphicsView QScrollBar::add-page:horizontal,
+QGraphicsView QScrollBar::sub-page:horizontal {
+    background: none;
+}
+
+/* Элементы внутри QGraphicsView */
+QGraphicsView QWidget {
+    background-color: #2e2e3e;
+    border: none;
+    color: #ffffff;
+}
+
+/* Элементы при наведении и взаимодействии */
+QGraphicsView QWidget:hover {
+    border: 1px solid #ff9800; /* Оранжевая граница при наведении */
+}
+
+QGraphicsView QWidget:focus {
+    border: 1px solid #ff9800; /* Оранжевая граница при фокусе */
+}</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="verticalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
+    </property>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
+    </property>
+    <property name="renderHints">
+     <set>QPainter::Antialiasing|QPainter::TextAntialiasing</set>
+    </property>
+    <property name="dragMode">
+     <enum>QGraphicsView::ScrollHandDrag</enum>
+    </property>
+    <property name="transformationAnchor">
+     <enum>QGraphicsView::AnchorViewCenter</enum>
+    </property>
+    <property name="viewportUpdateMode">
+     <enum>QGraphicsView::MinimalViewportUpdate</enum>
+    </property>
+   </widget>
+   <widget class="QWidget" name="buttonsWidget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>20</y>
+      <width>80</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>60</width>
+      <height>50</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>90</width>
+      <height>50</height>
+     </size>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background: transparent;
+</string>
+    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="1">
+      <widget class="QPushButton" name="saveMarkButton">
+       <property name="minimumSize">
+        <size>
+         <width>30</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Save(Ctrl + S)</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #2e2e3e; /* Тёмно-синий цвет кнопки */
+    border: 2px solid #3e3e5e; /* Более тёмная граница */
+    border-radius: 5px;
+    padding: 5px;
+}
+
+QPushButton:hover {
+    border: 2px solid #ff9800; /* Оранжевая граница при наведении */
+}
+
+QPushButton:pressed {
+    background-color: #ff9800; /* Оранжевый фон при нажатии */
+    border: 2px solid #ff9800;
+    color: #1e1e2e; /* Тёмный цвет текста при нажатии */
+}
+
+QPushButton:disabled {
+    background-color: #3e3e5e;
+    border: 2px solid #3e3e5e;
+    color: #7e7e8e;
+}</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset theme="document-save">
+         <normaloff>.</normaloff>.</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QPushButton" name="loadMarkButton">
+       <property name="minimumSize">
+        <size>
+         <width>30</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Load(Ctrl + L)</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #2e2e3e; /* Тёмно-синий цвет кнопки */
+    border: 2px solid #3e3e5e; /* Более тёмная граница */
+    border-radius: 5px;
+    padding: 5px;
+}
+
+QPushButton:hover {
+    border: 2px solid #ff9800; /* Оранжевая граница при наведении */
+}
+
+QPushButton:pressed {
+    background-color: #ff9800; /* Оранжевый фон при нажатии */
+    border: 2px solid #ff9800;
+    color: #1e1e2e; /* Тёмный цвет текста при нажатии */
+}
+
+QPushButton:disabled {
+    background-color: #3e3e5e;
+    border: 2px solid #3e3e5e;
+    color: #7e7e8e;
+}</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset theme="document-open">
+         <normaloff>.</normaloff>.</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QLabel" name="image">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>380</y>
+      <width>66</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+  </widget>
+  <action name="actionNew">
+   <property name="text">
+    <string>New</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="text">
+    <string>Save</string>
+   </property>
+  </action>
+  <action name="actionOpen">
+   <property name="text">
+    <string>Open</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="../img/img.qrc"/>
+ </resources>
+ <connections/>
+</ui>
