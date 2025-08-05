@@ -29,7 +29,6 @@ Mark::Mark(int id, double x, double y)
     degrees->addAction("1.57");
     degrees->addAction("3.14");
     degrees->addAction("-1.57");
-
 }
 
 int Mark::getId()
