@@ -14,7 +14,8 @@ Scene::~Scene()
 void Scene::drawBackground(QPainter* painter, const QRectF& rect)
 {
     //QColor color(225,79,0,255);
-    QColor color(0,0,139,100);
+    //QColor color(0,0,139,100);
+    QColor color(169, 169, 169, 50);
     QPen pen(color,1);
     painter->setPen(pen);
 
