@@ -1,22 +1,19 @@
-#ifndef MARKTABLE_H
-#define MARKTABLE_H
+#ifndef ACTIONTABLE_H
+#define ACTIONTABLE_H
 
 #include <QTableView>
 #include <QStandardItemModel>
-#include <QHeaderView>
-#include <QFile>
-#include <QMessageBox>
 #include <QSortFilterProxyModel>
 
-#include "../include/mark.h"
-#include "../include/config.h"
+#include "config.h"
 
-class MarkTable : public QTableView
+class ActionTable : public QTableView
 {
 
-    Q_OBJECT
+            Q_OBJECT
+
 public:
-    MarkTable();
+    ActionTable();
     QPair<double, double> getCoords(int row);
 
 private:
@@ -24,10 +21,10 @@ private:
     QSortFilterProxyModel* proxyModel;
 
 public slots:
-    void addRow(int, double, double);
+    void addRow(QString,int, double, double);
     /*void updateRow(int, int);*/
     void updateCoordsRow(int, double, double);
     void removeRow(int);
 };
 
-#endif // MARKTABLE_H
+#endif // ACTIONTABLE_H

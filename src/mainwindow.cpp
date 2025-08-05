@@ -6,6 +6,7 @@ MainWindow::MainWindow(QWidget *parent) :
     dialogWidget(new Dialog),
     scene(new Scene),
     markTable(new MarkTable),
+    actionTable(new ActionTable),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
@@ -18,10 +19,21 @@ MainWindow::MainWindow(QWidget *parent) :
     int windowWidth = this->width();
     int windowHeight = this->height();
 
-    markTable->resize(MARKTABLE_SIZE, windowHeight);
+    //markTable->resize(MARKTABLE_SIZE, windowHeight);
     markTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    markTable->move(windowWidth - MARKTABLE_SIZE, 0);
+    actionTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    //markTable->move(windowWidth - MARKTABLE_SIZE, 0);
     markTable->setParent(this);
+    actionTable->setParent(this);
+
+    ui->tabWidget->removeTab(1);
+    ui->tabWidget->removeTab(0);
+
+    ui->tabWidget->insertTab(0, markTable,"Marks");
+    ui->tabWidget->insertTab(1, actionTable,"Actions");
+
+    ui->tabWidget->resize(MARKTABLE_SIZE, windowHeight);
+    ui->tabWidget->move(windowWidth - MARKTABLE_SIZE, 0);
 
     scene->setParent(this);
 
@@ -63,10 +75,10 @@ void MainWindow::resizeEvent(QResizeEvent* event)
     int windowWidth = this->width();
     int windowHeight = this->height();
 
-    int tableWidth = markTable->width();
+    int tableWidth = ui->tabWidget->width();
 
-    markTable->move(windowWidth - tableWidth, 0);
-    markTable->resize(MARKTABLE_SIZE, windowHeight);
+    ui->tabWidget->move(windowWidth - tableWidth, 0);
+    ui->tabWidget->resize(MARKTABLE_SIZE, windowHeight);
     ui->workArea->resize(windowWidth - tableWidth, windowHeight);
     ui->image->move(20, windowHeight - 100);
 }

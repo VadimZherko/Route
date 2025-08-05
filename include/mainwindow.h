@@ -10,6 +10,8 @@
 #include "../include/scene.h"
 #include "../include/marktable.h"
 #include "../include/config.h"
+#include "../include/action.h"
+#include "../include/actiontable.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -30,6 +32,7 @@ private:
     Dialog* dialogWidget;
     Scene* scene;
     MarkTable* markTable;
+    ActionTable* actionTable;
 
     void setUpTableView();
     void resizeEvent(QResizeEvent*) override;

@@ -86,7 +86,7 @@ void Scene::drawBackground(QPainter* painter, const QRectF& rect)
     painter->drawText(QPointF(FONT_POSE_X, FONT_POSE_Y), QString::number(0));
 
     //Удалить
-    pen.setWidth(2);
+    /*pen.setWidth(2);
     color.setRgb(255,255,255);
     pen.setColor(color);
     painter->setPen(pen);
@@ -94,7 +94,7 @@ void Scene::drawBackground(QPainter* painter, const QRectF& rect)
     {
         painter->drawLine(QLineF(toPixels(0.6,i).first,toPixels(0,i).second,toPixels(1.2, i).first,toPixels(1.2, i).second));
     }
-    painter->drawLine(QLineF(0,0,100,0));
+    painter->drawLine(QLineF(0,0,100,0));*/
 }
 
 QPair<double, double> Scene::toCoords(double x, double y)
@@ -120,7 +120,7 @@ Mark* Scene::addMark(double x, double y, int id)
     this->addItem(new_mark);
     new_mark->setSelected(true);
 
-    emit markAdded("Nothing",id, x, y);
+    emit markAdded(id, x, y);
     emit setScrollHandDrag();
 
     return new_mark;

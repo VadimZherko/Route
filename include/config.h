@@ -5,6 +5,7 @@ const int GRID_SIZE = 40;
 const int MILLIMIMETER_GRID = GRID_SIZE / 5;
 const int MARKTABLE_SIZE = 300;
 const int COLUMN_WIDTH = 75;
+const int COLUMN_WIDTH_MARKTABLE = 100;
 
 const int MARK_SIZE = 24;
 const int CENTER_MARK = 12;

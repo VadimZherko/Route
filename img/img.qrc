@@ -7,5 +7,6 @@
         <file>saveMarkIcon.png</file>
         <file>axis.png</file>
         <file>logoMarkUp.png</file>
+        <file>arrow.png</file>
     </qresource>
 </RCC>

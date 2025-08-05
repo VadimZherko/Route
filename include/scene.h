@@ -76,7 +76,7 @@ public slots:
     void saveInFile(QString filePath);
 
 signals:
-    void markAdded(QString,int, qreal, qreal);
+    void markAdded(int, qreal, qreal);
     //void markUpdated(int, int);
     void markCoordsUpdated(int, double, double);
     void markRemoved(int);

@@ -1,12 +1,11 @@
-#include "../include/marktable.h"
-#include <QString>
+#include "../include/actiontable.h"
 
-MarkTable::MarkTable()
+ActionTable::ActionTable()
 {
-    model = new QStandardItemModel(0,3);
+    model = new QStandardItemModel(0,4);
     //this->setModel(model);
 
-    this->horizontalHeader()->sortIndicatorOrder();
+    //this->horizontalHeader()->sortIndicatorOrder();
 
     proxyModel = new QSortFilterProxyModel(this);
     proxyModel->setSourceModel(model);
@@ -14,22 +13,25 @@ MarkTable::MarkTable()
 
     this->setModel(proxyModel);
     this->setSortingEnabled(false);
-    this->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-    this->verticalHeader()->setVisible(false);
+    //this->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+    //this->verticalHeader()->setVisible(false);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    model->setHorizontalHeaderLabels({"id", "x", "y"});
-    this->setColumnWidth(0, COLUMN_WIDTH_MARKTABLE);
-    this->setColumnWidth(1, COLUMN_WIDTH_MARKTABLE);
-    this->setColumnWidth(2, COLUMN_WIDTH_MARKTABLE);
+    model->setHorizontalHeaderLabels({"action","id", "x", "y"});
+    this->setColumnWidth(0, COLUMN_WIDTH);
+    this->setColumnWidth(1, COLUMN_WIDTH);
+    this->setColumnWidth(2, COLUMN_WIDTH);
+    this->setColumnWidth(3, COLUMN_WIDTH);
 }
 
-void MarkTable::addRow(int id, double x, double y)
+void ActionTable::addRow(QString action, int id, double x, double y)
 {
     auto row = model->rowCount();
     model->insertRow(row);
 
+    action = "Nothing";
+    auto actionItem = new QStandardItem(action);
     //actionItem->setData(QVariant::fromValue(action), Qt::UserRole);
 
     auto idItem = new QStandardItem(QString::number(id));
@@ -41,9 +43,10 @@ void MarkTable::addRow(int id, double x, double y)
     auto yItem = new QStandardItem(QString::number(y));
     //yItem->setData(QVariant::fromValue(y), Qt::UserRole);
 
-    model->setItem(row, 0, idItem);
-    model->setItem(row, 1, xItem);
-    model->setItem(row, 2, yItem);
+    model->setItem(row, 0, actionItem);
+    model->setItem(row, 1, idItem);
+    model->setItem(row, 2, xItem);
+    model->setItem(row, 3, yItem);
 
 
     proxyModel->invalidate();
@@ -57,7 +60,7 @@ void MarkTable::addRow(int id, double x, double y)
     model->setItem(row, 3, new QStandardItem(QString::number(angular)));
 }*/
 
-void MarkTable::updateCoordsRow(int id,double x, double y)
+void ActionTable::updateCoordsRow(int id,double x, double y)
 {
     auto elem = model->findItems(QString::number(id));
     auto row = elem.first()->row();
@@ -65,14 +68,14 @@ void MarkTable::updateCoordsRow(int id,double x, double y)
     model->setItem(row, 3, new QStandardItem(QString::number(y)));
 }
 
-void MarkTable::removeRow(int id)
+void ActionTable::removeRow(int id)
 {
     auto elem = model->findItems(QString::number(id),Qt::MatchExactly,1);
     auto row = elem.first()->row();
     model->removeRows(row, 1);
 }
 
-QPair<double, double> MarkTable::getCoords(int row)
+QPair<double, double> ActionTable::getCoords(int row)
 {
     QPair<double, double> pair{model->item(row, 2)->text().toDouble(), model->item(row, 3)->text().toDouble()};
     return pair;

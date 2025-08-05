@@ -29,6 +29,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ui/mainwindow.ui
         include/config.h include/dialog.h include/mainwindow.h include/mark.h include/marktable.h include/scene.h
         img/img.qrc
+        include/action.h src/action.cpp
+        include/actiontable.h src/actiontable.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET Route APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
