@@ -2,7 +2,7 @@
 
 ActionTable::ActionTable()
 {
-    model = new QStandardItemModel(0,4);
+    model = new QStandardItemModel(0,1);
     //this->setModel(model);
 
     //this->horizontalHeader()->sortIndicatorOrder();
@@ -18,14 +18,11 @@ ActionTable::ActionTable()
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    model->setHorizontalHeaderLabels({"action","id", "x", "y"});
-    this->setColumnWidth(0, COLUMN_WIDTH);
-    this->setColumnWidth(1, COLUMN_WIDTH);
-    this->setColumnWidth(2, COLUMN_WIDTH);
-    this->setColumnWidth(3, COLUMN_WIDTH);
+    model->setHorizontalHeaderLabels({"action"});
+    this->setColumnWidth(0, MARKTABLE_SIZE);
 }
 
-void ActionTable::addRow(QString action, int id, double x, double y)
+/*void ActionTable::addRow(QString action, int id, double x, double y)
 {
     auto row = model->rowCount();
     model->insertRow(row);
@@ -51,7 +48,7 @@ void ActionTable::addRow(QString action, int id, double x, double y)
 
     proxyModel->invalidate();
     proxyModel->sort(1, Qt::AscendingOrder);
-}
+}*/
 
 /*void MarkTable::updateRow(int id, int angular)
 {

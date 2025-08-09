@@ -21,7 +21,7 @@ private:
     QSortFilterProxyModel* proxyModel;
 
 public slots:
-    void addRow(QString,int, double, double);
+    //void addRow(QString,int, double, double);
     /*void updateRow(int, int);*/
     void updateCoordsRow(int, double, double);
     void removeRow(int);

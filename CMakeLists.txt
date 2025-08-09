@@ -13,10 +13,17 @@ find_package(QT NAMES Qt6 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
-include/config.h include/dialog.h include/mainwindow.h include/mark.h include/marktable.h include/scene.h
-src/dialog.cpp src/main.cpp src/mainwindow.cpp src/mark.cpp src/marktable.cpp src/scene.cpp
+include/config.h
+include/dialog.h src/dialog.cpp
+include/mainwindow.h src/mainwindow.cpp
+include/mark.h src/mark.cpp
+include/marktable.h src/marktable.cpp
+include/scene.h src/scene.cpp
+include/action.h src/action.cpp
+include/actiontable.h src/actiontable.cpp
+src/main.cpp
+
 ui/mainwindow.ui
-include/config.h include/dialog.h include/mainwindow.h include/mark.h include/marktable.h include/scene.h
 img/img.qrc
 )
 
@@ -24,13 +31,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(Route
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        include/config.h include/dialog.h include/mainwindow.h include/mark.h include/marktable.h include/scene.h
-        src/dialog.cpp src/main.cpp src/mainwindow.cpp src/mark.cpp src/marktable.cpp src/scene.cpp
-        ui/mainwindow.ui
-        include/config.h include/dialog.h include/mainwindow.h include/mark.h include/marktable.h include/scene.h
-        img/img.qrc
-        include/action.h src/action.cpp
-        include/actiontable.h src/actiontable.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET Route APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

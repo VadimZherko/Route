@@ -51,24 +51,6 @@ void Mark::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     QGraphicsPixmapItem::contextMenuEvent(event);
     if(typeClick == nullptr) return;
 
-    if(typeClick->toolTip() == "1.57" || typeClick->toolTip() == "3.14"|| typeClick->toolTip() == "-1.57" && isArrowOn)
-    {
-        isArrowOn = true;
-        addArrow();
-    }
-    else if(typeClick->toolTip() == "Lifter up/down")
-    {
-        if(isLifterUpped)
-        {
-            QrImage.load(":/new/prefix1/markIconLifterDown.png");
-            this->setPixmap(QrImage);
-            isLifterUpped = false;
-        }
-        else
-        {
-            QrImage.load(":/new/prefix1/markIconLifterUp.png");
-            this->setPixmap(QrImage);
-            isLifterUpped = true;
-        }
-    }
+    qDebug() << typeClick->toolTip();
+    //if(typeClick->toolTip() == "1.57" || typeClick->toolTip() == "3.14"|| typeClick->toolTip() == "-1.57" && isArrowOn)
 }

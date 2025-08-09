@@ -48,7 +48,7 @@ void Scene::drawBackground(QPainter* painter, const QRectF& rect)
         painter->drawLine(QLineF(x, top, x, bottom));
     }
 
-    pen.setWidth(3);
+    /*pen.setWidth(3);
     painter->setPen(pen);
     painter->drawLine(QLineF(0, top, 0, bottom));
 
@@ -85,7 +85,7 @@ void Scene::drawBackground(QPainter* painter, const QRectF& rect)
         painter->drawText(QPointF(FONT_POSE_X, y), QString::number(i));
     }
 
-    painter->drawText(QPointF(FONT_POSE_X, FONT_POSE_Y), QString::number(0));
+    painter->drawText(QPointF(FONT_POSE_X, FONT_POSE_Y), QString::number(0));*/
 
     //Удалить
     /*pen.setWidth(2);
