@@ -41,6 +41,7 @@ public:
     ~Scene();
     void resize(double, double, Sides, Sides);
     QStandardItemModel* getMarkHandler();
+    QVector<Mark*> marks;
 
 private:
     void showError(QString);
@@ -74,6 +75,7 @@ public slots:
 
     //void duplicate(int);
     void saveInFile(QString filePath);
+    void markActionSc(QString, int, double, double);
 
 signals:
     void markAdded(int, qreal, qreal);
@@ -83,6 +85,7 @@ signals:
     void setRubberBandDrag();
     void setScrollHandDrag();
     void keyPressEvent_(QKeyEvent*);
+    void markAction(QString, int, double, double);
 };
 
 #endif // SCENE_H

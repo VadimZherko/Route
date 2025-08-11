@@ -50,17 +50,18 @@ MainWindow::MainWindow(QWidget *parent) :
                      [this]() {this->ui->workArea->setDragMode(QGraphicsView::ScrollHandDrag);});
 
     QObject::connect(scene, &Scene::markAdded, this->markTable, &MarkTable::addRow);
-    //QObject::connect(scene, &Scene::markUpdated, this->markTable, &MarkTable::updateRow);
     QObject::connect(scene, &Scene::markCoordsUpdated, this->markTable, &MarkTable::updateCoordsRow);
     QObject::connect(scene, &Scene::markRemoved, this->markTable, &MarkTable::removeRow);
 
-    QObject::connect(dialogWidget, &Dialog::saveFilePath, this->scene, &Scene::saveInFile);
+    QObject::connect(dialogWidget, &Dialog::saveFilePath, this->actionTable, &ActionTable::saveInFile);
     QObject::connect(dialogWidget, &Dialog::loadFilePath, this->scene, &Scene::loadTable);
 
     QObject::connect(markTable, &MarkTable::doubleClicked, this, &MainWindow::toMark);
 
     ui->workArea->setScene(scene);
     ui->workArea->centerOn(-GRID_SIZE * SCENE_X_COEF + 600, GRID_SIZE * SCENE_HEIGHT_COEF - 2250);
+
+    QObject::connect(scene,&Scene::markAction,this->actionTable,&ActionTable::addRow);
 }
 
 MainWindow::~MainWindow()
@@ -97,6 +98,7 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
     }
 }
 
+//Not working
 void MainWindow::toMark(const QModelIndex& index)
 {
     auto coords = markTable->getCoords(index.row());

@@ -2,7 +2,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QMenu>
 
-Mark::Mark(int id, double x, double y)
+Mark::Mark(int id, double x, double y) : id(id), x(x), y(y), isLifterUpped(false)
 {
     this->setPos(x, y);
 
@@ -10,10 +10,6 @@ Mark::Mark(int id, double x, double y)
 
     this->setPixmap(QrImage);
     this->setFlag(QGraphicsItem::ItemIsSelectable);
-
-    this->id = id;
-    this->isLifterUpped = false;
-    this->isArrowOn = false;
 
     QString* text_id = new QString;
     text_id->setNum(id);
@@ -36,21 +32,23 @@ int Mark::getId()
     return id;
 }
 
-void Mark::addArrow()
-{
-    QGraphicsPixmapItem* arrow = new QGraphicsPixmapItem(this);
-    QPixmap arrowImage(":/new/prefix1/arrow.png");
-    arrow->setPixmap(arrowImage);
-    arrow->show();
-    arrow->setPos(this->boundingRect().topLeft().x() - 5, this->boundingRect().topLeft().y() - 5);
-}
-
 void Mark::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
     auto typeClick = menu.exec(event->screenPos());
     QGraphicsPixmapItem::contextMenuEvent(event);
     if(typeClick == nullptr) return;
+    qDebug() << typeClick->toolTip(); //COM DEL
 
-    qDebug() << typeClick->toolTip();
-    //if(typeClick->toolTip() == "1.57" || typeClick->toolTip() == "3.14"|| typeClick->toolTip() == "-1.57" && isArrowOn)
-}
+    if(typeClick->toolTip() == "Lifter up/down" && isLifterUpped == false)
+    {
+        emit markAction(typeClick->toolTip() + " 0", id, x, y);
+        return;
+    }
+    else if(typeClick->toolTip() == "Lifter up/down" && isLifterUpped == true)
+    {
+        emit markAction(typeClick->toolTip() + " 1", id, x, y);
+        return;
+    }
+
+    emit markAction(typeClick->toolTip(), id, x, y);
+    }

@@ -8,6 +8,13 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
+set(CMAKE_PREFIX_PATH "/usr/lib/x86_64-linux-gnu/cmake/Qt6")
+set(Qt_DIR /usr/lib/x86_64-linux-gnu/cmake/Qt6)
+
+
+message(STATUS "Qt6_DIR = ${Qt6_DIR}")
+message(STATUS "CMAKE_PREFIX_PATH = ${CMAKE_PREFIX_PATH}")
 
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)

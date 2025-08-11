@@ -3,9 +3,6 @@
 ActionTable::ActionTable()
 {
     model = new QStandardItemModel(0,1);
-    //this->setModel(model);
-
-    //this->horizontalHeader()->sortIndicatorOrder();
 
     proxyModel = new QSortFilterProxyModel(this);
     proxyModel->setSourceModel(model);
@@ -13,8 +10,6 @@ ActionTable::ActionTable()
 
     this->setModel(proxyModel);
     this->setSortingEnabled(false);
-    //this->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-    //this->verticalHeader()->setVisible(false);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
@@ -22,58 +17,78 @@ ActionTable::ActionTable()
     this->setColumnWidth(0, MARKTABLE_SIZE);
 }
 
-/*void ActionTable::addRow(QString action, int id, double x, double y)
+void ActionTable::addRow(QString action, int id, double x, double y)
 {
-    auto row = model->rowCount();
-    model->insertRow(row);
+    //auto row = model->rowCount();
+    //model->insertRow(row);
 
-    action = "Nothing";
-    auto actionItem = new QStandardItem(action);
-    //actionItem->setData(QVariant::fromValue(action), Qt::UserRole);
+    QStandardItem* actionItem;
+    if(action == "Move")
+    {
+        QString actionTemp = "MOVE " + QString::number(id) + ' ' + QString::number(x) + ' ' + QString::number(y);
+        actionItem = new QStandardItem(actionTemp);
+    }
+    else if(action == "Lifter up/down 1")
+    {
+        QString actionTemp = "LIFTER 1 " + QString::number(id);
+        actionItem = new QStandardItem(actionTemp);
+    }
+    else if(action == "Lifter up/down 0")
+    {
+        QString actionTemp = "LIFTER 0 " + QString::number(id);
+        actionItem = new QStandardItem(actionTemp);
+    }
+    else if(action == "0" || action == "1.57" || action == "-1.57" || action == "3.14" )
+    {
+        QString actionTemp = "ROTATE " + action + ' ' + QString::number(id);
+        actionItem = new QStandardItem(actionTemp);
+    }
+    else
+    {
+        QString actionTemp = "ERROR";
+        actionItem = new QStandardItem(actionTemp);
+    }
 
-    auto idItem = new QStandardItem(QString::number(id));
-    //idItem->setData(QVariant::fromValue(id), Qt::UserRole);
+    model->insertRow(0, actionItem);
 
-    auto xItem = new QStandardItem(QString::number(x));
-    //xItem->setData(QVariant::fromValue(x), Qt::UserRole);
+    //model->setItem(row, 0, actionItem);
 
-    auto yItem = new QStandardItem(QString::number(y));
-    //yItem->setData(QVariant::fromValue(y), Qt::UserRole);
-
-    model->setItem(row, 0, actionItem);
-    model->setItem(row, 1, idItem);
-    model->setItem(row, 2, xItem);
-    model->setItem(row, 3, yItem);
-
-
-    proxyModel->invalidate();
-    proxyModel->sort(1, Qt::AscendingOrder);
-}*/
-
-/*void MarkTable::updateRow(int id, int angular)
-{
-    auto elem = model->findItems(QString::number(id));
-    auto row = elem.first()->row();
-    model->setItem(row, 3, new QStandardItem(QString::number(angular)));
-}*/
-
-void ActionTable::updateCoordsRow(int id,double x, double y)
-{
-    auto elem = model->findItems(QString::number(id));
-    auto row = elem.first()->row();
-    model->setItem(row, 2, new QStandardItem(QString::number(x)));
-    model->setItem(row, 3, new QStandardItem(QString::number(y)));
+    //proxyModel->invalidate();
+    //proxyModel->sort(1, Qt::AscendingOrder);
 }
 
-void ActionTable::removeRow(int id)
+/*void ActionTable::removeRow(int id)
 {
     auto elem = model->findItems(QString::number(id),Qt::MatchExactly,1);
     auto row = elem.first()->row();
     model->removeRows(row, 1);
-}
+}*/
 
-QPair<double, double> ActionTable::getCoords(int row)
+void ActionTable::saveInFile(QString filePath)
 {
-    QPair<double, double> pair{model->item(row, 2)->text().toDouble(), model->item(row, 3)->text().toDouble()};
-    return pair;
+    QFile file(filePath);
+
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        QMessageBox::warning(this, "Error", "Error opening file");
+        return;
+    }
+
+    QTextStream out(&file);
+    //out << "label_id," << " x," << " y" << "\n";
+
+    auto rowCount = model->rowCount();
+
+    for(auto i = 0; i < rowCount; i++)
+    {
+        out << model->item(i)->text() << '\n';
+    }
+
+    /*(for(auto markItem : marks)
+    {
+        auto [x,y] = toCoords(markItem->scenePos().x(), markItem->scenePos().y());
+        out << markItem->getId() << ',' <<  x << ',' << y << '\n';
+    }*/
+
+    file.close();
 }

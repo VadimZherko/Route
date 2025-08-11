@@ -4,6 +4,9 @@ Scene::Scene()
 {
     parentWidget = new QWidget();
     this->setSceneRect(-GRID_SIZE * SCENE_X_COEF, -GRID_SIZE * SCENE_Y_COEF, GRID_SIZE * SCENE_WIDTH_COEF, GRID_SIZE * SCENE_HEIGHT_COEF);
+
+    Mark* temp = new Mark(-100, -100, -100);
+    marks.push_back(temp);
 }
 
 Scene::~Scene()
@@ -124,6 +127,8 @@ Mark* Scene::addMark(double x, double y, int id)
 
     emit markAdded(id, x, y);
     emit setScrollHandDrag();
+
+    QObject::connect(new_mark, &Mark::markAction, this, &Scene::markActionSc);
 
     return new_mark;
 }
@@ -317,4 +322,12 @@ void Scene::showError(QString errorText)
 {
     QMessageBox::warning(parentWidget, "Error", errorText);
     emit setScrollHandDrag();
+}
+
+void Scene::markActionSc(QString action, int id, double x, double y)
+{
+    qDebug() << x << ' ' << y;
+    auto tempCoords = toCoords(x, y);
+    qDebug() << tempCoords.first << ' ' << tempCoords.second;
+    emit markAction(action, id, tempCoords.first, tempCoords.second);
 }

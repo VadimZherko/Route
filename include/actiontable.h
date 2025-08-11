@@ -4,6 +4,9 @@
 #include <QTableView>
 #include <QStandardItemModel>
 #include <QSortFilterProxyModel>
+#include <QFile>
+#include <QDialog>
+#include <QMessageBox>
 
 #include "config.h"
 
@@ -14,17 +17,15 @@ class ActionTable : public QTableView
 
 public:
     ActionTable();
-    QPair<double, double> getCoords(int row);
 
 private:
     QStandardItemModel* model;
     QSortFilterProxyModel* proxyModel;
 
 public slots:
-    //void addRow(QString,int, double, double);
-    /*void updateRow(int, int);*/
-    void updateCoordsRow(int, double, double);
-    void removeRow(int);
+    void addRow(QString, int, double, double);
+    void saveInFile(QString);
+    //void removeRow(int);
 };
 
 #endif // ACTIONTABLE_H

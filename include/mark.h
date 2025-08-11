@@ -6,8 +6,9 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QMenu>
 
-class Mark : public QGraphicsPixmapItem
+class Mark : public QObject, public QGraphicsPixmapItem
 {
+    Q_OBJECT
 public:
     Mark(int, double, double);
     void setId();
@@ -18,14 +19,15 @@ private:
     double y;
     int id;
     bool isLifterUpped;
-    bool isArrowOn;
 
     QGraphicsTextItem* textItem;
     QPixmap QrImage;
     QMenu menu;
 
-    void addArrow();
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
+
+signals:
+    void markAction(QString, int, double, double);
 };
 
 #endif // MARK_H
