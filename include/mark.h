@@ -5,6 +5,8 @@
 #include <QGraphicsPixmapItem>
 #include <QGraphicsSceneMouseEvent>
 #include <QMenu>
+#include <QItemSelection>
+#include <QPainter>
 
 class Mark : public QObject, public QGraphicsPixmapItem
 {
@@ -24,7 +26,10 @@ private:
     QPixmap QrImage;
     QMenu menu;
 
-    void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem*, QWidget*) override;
+    QVariant itemChange(GraphicsItemChange, const QVariant&) override;
+    QPainterPath shape() const override;
 
 signals:
     void markAction(QString, int, double, double);

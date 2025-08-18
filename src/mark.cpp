@@ -51,4 +51,37 @@ void Mark::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     }
 
     emit markAction(typeClick->toolTip(), id, x, y);
+}
+
+QVariant Mark::itemChange(GraphicsItemChange change, const QVariant& value)
+{
+    if (change == QGraphicsItem::ItemSelectedChange)
+    {
+        bool isBeSelected = value.toBool();
+        if (isBeSelected)
+        {
+            QrImage.load(":/new/prefix1/markIconSelected.png");
+            setPixmap(QrImage);
+        }
+        else
+        {
+            QrImage.load(":/new/prefix1/markIcon.png");
+            setPixmap(QrImage);
+        }
     }
+    return QGraphicsPixmapItem::itemChange(change, value);
+}
+
+void Mark::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    painter->drawPixmap(0, 0, pixmap());
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+}
+
+QPainterPath Mark::shape() const
+{
+    QPainterPath path;
+    path.addRect(boundingRect());
+    return path;
+}

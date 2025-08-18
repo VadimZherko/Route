@@ -67,9 +67,9 @@ void MarkTable::updateCoordsRow(int id,double x, double y)
 
 void MarkTable::removeRow(int id)
 {
-    auto elem = model->findItems(QString::number(id),Qt::MatchExactly,1);
+    auto elem = model->findItems(QString::number(id),Qt::MatchExactly,0);
     auto row = elem.first()->row();
-    model->removeRows(row, 1);
+    model->removeRows(row, 0);
 }
 
 QPair<double, double> MarkTable::getCoords(int row)
