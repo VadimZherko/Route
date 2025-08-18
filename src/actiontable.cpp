@@ -15,6 +15,8 @@ ActionTable::ActionTable()
 
     model->setHorizontalHeaderLabels({"action"});
     this->setColumnWidth(0, MARKTABLE_SIZE);
+
+    menu.addAction("Delete action");
 }
 
 void ActionTable::addRow(QString action, int id, double x, double y)
@@ -91,4 +93,32 @@ void ActionTable::saveInFile(QString filePath)
     }*/
 
     file.close();
+}
+
+void ActionTable::contextMenuEvent(QContextMenuEvent* event)
+{
+    auto typeClick = menu.exec(event->globalPos());
+    if(typeClick == nullptr) return;
+
+    if(typeClick->toolTip() == "Delete action")
+    {
+        deleteAction();
+        return;
+    }
+}
+
+void ActionTable::deleteAction()
+{
+    QList<int> rows;
+    for(auto i : this->selectedIndexes())
+    {
+        rows.append(i.row());
+    }
+
+    std::sort(rows.begin(),rows.end(),std::greater<int>());
+
+    for(auto i : rows)
+    {
+        model->removeRow(i);
+    }
 }

@@ -7,6 +7,8 @@
 #include <QFile>
 #include <QDialog>
 #include <QMessageBox>
+#include <QContextMenuEvent>
+#include <QMenu>
 
 #include "config.h"
 
@@ -21,6 +23,11 @@ public:
 private:
     QStandardItemModel* model;
     QSortFilterProxyModel* proxyModel;
+
+    QMenu menu;
+
+    void deleteAction();
+    void contextMenuEvent(QContextMenuEvent* event) override;
 
 public slots:
     void addRow(QString, int, double, double);

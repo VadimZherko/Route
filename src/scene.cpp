@@ -326,8 +326,6 @@ void Scene::showError(QString errorText)
 
 void Scene::markActionSc(QString action, int id, double x, double y)
 {
-    qDebug() << x << ' ' << y;
     auto tempCoords = toCoords(x, y);
-    qDebug() << tempCoords.first << ' ' << tempCoords.second;
     emit markAction(action, id, tempCoords.first, tempCoords.second);
 }

@@ -37,7 +37,6 @@ void Mark::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     auto typeClick = menu.exec(event->screenPos());
     QGraphicsPixmapItem::contextMenuEvent(event);
     if(typeClick == nullptr) return;
-    qDebug() << typeClick->toolTip(); //COM DEL
 
     if(typeClick->toolTip() == "Lifter up/down" && isLifterUpped == false)
     {
