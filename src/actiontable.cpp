@@ -27,6 +27,17 @@ void ActionTable::addRow(QString action, int id, double x, double y)
     QStandardItem* actionItem;
     if(action == "Move")
     {
+        QString row;
+        for(int i = 0; i < model->rowCount(); i++)
+        {
+            row = model->item(i,0)->text();
+            if(row.startsWith('M'))
+            {
+                auto rowSplited = row.split(' ');
+                emit moveSignal(rowSplited[2].toDouble(),rowSplited[3].toDouble(), x, y);
+            }
+        }
+
         QString actionTemp = "MOVE " + QString::number(id) + ' ' + QString::number(x) + ' ' + QString::number(y);
         actionItem = new QStandardItem(actionTemp);
     }
@@ -58,13 +69,6 @@ void ActionTable::addRow(QString action, int id, double x, double y)
     //proxyModel->invalidate();
     //proxyModel->sort(1, Qt::AscendingOrder);
 }
-
-/*void ActionTable::removeRow(int id)
-{
-    auto elem = model->findItems(QString::number(id),Qt::MatchExactly,1);
-    auto row = elem.first()->row();
-    model->removeRows(row, 1);
-}*/
 
 void ActionTable::saveInFile(QString filePath)
 {
@@ -119,6 +123,20 @@ void ActionTable::deleteAction()
 
     for(auto i : rows)
     {
+        auto row = model->item(i,0)->text();
+        if(row.startsWith('M'))
+        {
+            auto rowSplited = row.split(' ');
+            for(int i = model->rowCount() - 1; i >= 0; i--)
+            {
+                auto rowTemp = model->item(i,0)->text();
+                if(row.startsWith('M'))
+                {
+                    auto rowTempSplited = rowTemp.split(' ');
+                    emit delMoveSignal(rowSplited[2].toDouble(),rowSplited[3].toDouble(), rowTempSplited[2].toDouble(), rowTempSplited[3].toDouble());
+                }
+            }
+        }
         model->removeRow(i);
     }
 }

@@ -35,8 +35,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tabWidget->resize(MARKTABLE_SIZE, windowHeight);
     ui->tabWidget->move(windowWidth - MARKTABLE_SIZE, 0);
 
-    scene->setParent(this);
-
     QObject::connect(ui->loadMarkButton, SIGNAL(clicked()), this->dialogWidget, SLOT(showLoadMarkFromFileDialog()));
     QObject::connect(ui->saveMarkButton, SIGNAL(clicked()), this->dialogWidget, SLOT(showSaveMarkInFileDialog()));
 
@@ -52,6 +50,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(scene, &Scene::markAdded, this->markTable, &MarkTable::addRow);
     QObject::connect(scene, &Scene::markCoordsUpdated, this->markTable, &MarkTable::updateCoordsRow);
     QObject::connect(scene, &Scene::markRemoved, this->markTable, &MarkTable::removeRow);
+    QObject::connect(actionTable, &ActionTable::moveSignal, this->scene, &Scene::moveLineAdd);
+    QObject::connect(actionTable, &ActionTable::delMoveSignal, this->scene, &Scene::moveLineDelete);
 
     QObject::connect(dialogWidget, &Dialog::saveFilePath, this->actionTable, &ActionTable::saveInFile);
     QObject::connect(dialogWidget, &Dialog::loadFilePath, this->scene, &Scene::loadTable);

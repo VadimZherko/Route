@@ -329,3 +329,30 @@ void Scene::markActionSc(QString action, int id, double x, double y)
     auto tempCoords = toCoords(x, y);
     emit markAction(action, id, tempCoords.first, tempCoords.second);
 }
+
+void Scene::moveLineAdd(double x1, double y1, double x2, double y2)
+{
+    auto step = MARK_SIZE / 2;
+
+    QColor color(255, 36, 0, 255);
+    QPen pen(color, 2);
+
+    auto firstCoords = toPixels(x1,y1);
+    auto secondCoords = toPixels(x2,y2);
+    addLine(firstCoords.first + step, firstCoords.second + step, secondCoords.first + step, secondCoords.second + step, pen);
+}
+
+void Scene::moveLineDelete(double x1, double y1, double x2, double y2)
+{
+    auto firstCoords = toPixels(x1,y1);
+    auto secondCoords = toPixels(x2,y2);
+    auto step = MARK_SIZE / 2;
+
+    auto temp = this->items(firstCoords.first + step, firstCoords.second + step, secondCoords.first + step, secondCoords.second + step,
+                            Qt::IntersectsItemShape, Qt::AscendingOrder);
+    for(auto i : temp)
+    {
+        if(auto item = qgraphicsitem_cast<QGraphicsLineItem*>(i))
+        delete item;
+    }
+}

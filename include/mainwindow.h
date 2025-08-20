@@ -33,7 +33,6 @@ private:
     Scene* scene;
     MarkTable* markTable;
     ActionTable* actionTable;
-
     void setUpTableView();
     void resizeEvent(QResizeEvent*) override;
     void keyPressEvent(QKeyEvent*) override;

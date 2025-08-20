@@ -33,6 +33,10 @@ public slots:
     void addRow(QString, int, double, double);
     void saveInFile(QString);
     //void removeRow(int);
+
+signals:
+    void moveSignal(double, double, double, double);
+    void delMoveSignal(double, double, double, double);
 };
 
 #endif // ACTIONTABLE_H

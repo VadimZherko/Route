@@ -77,6 +77,9 @@ public slots:
     void saveInFile(QString filePath);
     void markActionSc(QString, int, double, double);
 
+    void moveLineAdd(double, double, double, double);
+    void moveLineDelete(double, double, double, double);
+
 signals:
     void markAdded(int, qreal, qreal);
     //void markUpdated(int, int);
