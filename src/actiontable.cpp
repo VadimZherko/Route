@@ -28,17 +28,18 @@ void ActionTable::addRow(QString action, int id, double x, double y)
     if(action == "Move")
     {
         QString row;
-        for(int i = 0; i < model->rowCount(); i++)
+        for(int i = model->rowCount() - 1; i >= 0; i--)
         {
             row = model->item(i,0)->text();
             if(row.startsWith('M'))
             {
                 auto rowSplited = row.split(' ');
-                emit moveSignal(rowSplited[2].toDouble(),rowSplited[3].toDouble(), x, y);
+                emit moveSignal(rowSplited[1].toDouble(),rowSplited[2].toDouble(), x, y);
+                break;
             }
         }
 
-        QString actionTemp = "MOVE " + QString::number(id) + ' ' + QString::number(x) + ' ' + QString::number(y);
+        QString actionTemp = "MOVE " + QString::number(x) + ' ' + QString::number(y) + ' ' + QString::number(id);
         actionItem = new QStandardItem(actionTemp);
     }
     else if(action == "Lifter up/down 1")
@@ -62,7 +63,7 @@ void ActionTable::addRow(QString action, int id, double x, double y)
         actionItem = new QStandardItem(actionTemp);
     }
 
-    model->insertRow(0, actionItem);
+    model->insertRow(model->rowCount(), actionItem);
 
     //model->setItem(row, 0, actionItem);
 
@@ -119,24 +120,54 @@ void ActionTable::deleteAction()
         rows.append(i.row());
     }
 
+    qDebug() << *rows.end();
+
     std::sort(rows.begin(),rows.end(),std::greater<int>());
 
-    for(auto i : rows)
+    for(auto i = rows.begin(); i != rows.end(); i++)
+    {
+        qDebug() << "Цикл 1";
+        if(!model->item(*i,0)->text().startsWith('M'))
+        {
+            model->removeRow(*i);
+            continue;
+        }
+        qDebug() << "Прошло первый if";
+
+        for(auto y = *i - 1; y >= 0; y--)
+        {
+            auto row = model->item(y,0)->text();
+            if(row.startsWith('M'))
+            {
+                qDebug() << model->item(*i,0)->text() << "||" << model->item(y,0)->text();
+                auto rowSplited = model->item(*i,0)->text().split(' ');
+                auto rowTempSplited = row.split(' ');
+                emit delMoveSignal(rowSplited[1].toDouble(),rowSplited[2].toDouble(), rowTempSplited[1].toDouble(), rowTempSplited[2].toDouble());
+                break;
+            }
+        }
+        qDebug() << "Прошло цикл";
+
+        model->removeRow(*i);
+    }
+
+    // ---------------------
+    /*for(auto i : rows)
     {
         auto row = model->item(i,0)->text();
         if(row.startsWith('M'))
         {
             auto rowSplited = row.split(' ');
-            for(int i = model->rowCount() - 1; i >= 0; i--)
+            for(int i = 0; i < model->rowCount(); i++)
             {
                 auto rowTemp = model->item(i,0)->text();
                 if(row.startsWith('M'))
                 {
                     auto rowTempSplited = rowTemp.split(' ');
-                    emit delMoveSignal(rowSplited[2].toDouble(),rowSplited[3].toDouble(), rowTempSplited[2].toDouble(), rowTempSplited[3].toDouble());
+                    emit delMoveSignal(rowSplited[1].toDouble(),rowSplited[2].toDouble(), rowTempSplited[1].toDouble(), rowTempSplited[2].toDouble());
+                    break;
                 }
             }
         }
-        model->removeRow(i);
-    }
+        model->removeRow(i);*/
 }

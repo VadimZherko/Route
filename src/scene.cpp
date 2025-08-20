@@ -123,7 +123,7 @@ Mark* Scene::addMark(double x, double y, int id)
     checkSceneSize(newX, newY);
     Mark* new_mark = new Mark(id, newX, newY);
     this->addItem(new_mark);
-    new_mark->setSelected(true);
+    //new_mark->setSelected(true);
 
     emit markAdded(id, x, y);
     emit setScrollHandDrag();
@@ -342,11 +342,24 @@ void Scene::moveLineAdd(double x1, double y1, double x2, double y2)
     addLine(firstCoords.first + step, firstCoords.second + step, secondCoords.first + step, secondCoords.second + step, pen);
 }
 
-void Scene::moveLineDelete(double x1, double y1, double x2, double y2)
+/*void Scene::moveLineDelete(double x1, double y1, double x2, double y2)
 {
     auto firstCoords = toPixels(x1,y1);
     auto secondCoords = toPixels(x2,y2);
     auto step = MARK_SIZE / 2;
+
+    QPainterPath path;
+    path.moveTo(firstCoords.first + step, firstCoords.second + step);
+    path.lineTo(secondCoords.first + step, secondCoords.second + step);
+
+    auto temp = this->items(path, Qt::IntersectsItemShape);
+    for (auto i : temp)
+    {
+        if (auto item = qgraphicsitem_cast<QGraphicsLineItem*>(i))
+            delete item;
+    }
+
+
 
     auto temp = this->items(firstCoords.first + step, firstCoords.second + step, secondCoords.first + step, secondCoords.second + step,
                             Qt::IntersectsItemShape, Qt::AscendingOrder);
@@ -354,5 +367,33 @@ void Scene::moveLineDelete(double x1, double y1, double x2, double y2)
     {
         if(auto item = qgraphicsitem_cast<QGraphicsLineItem*>(i))
         delete item;
+    }
+}*/
+
+void Scene::moveLineDelete(double x1, double y1, double x2, double y2)
+{
+    auto step = MARK_SIZE / 2;
+
+    auto firstCoords = toPixels(x1, y1);
+    auto secondCoords = toPixels(x2, y2);
+
+    for (auto item : items()) {
+        if (auto line = qgraphicsitem_cast<QGraphicsLineItem*>(item)) {
+            QLineF l = line->line();
+
+            if ((qFuzzyCompare(l.x1(), firstCoords.first + step) &&
+                 qFuzzyCompare(l.y1(), firstCoords.second + step) &&
+                 qFuzzyCompare(l.x2(), secondCoords.first + step) &&
+                 qFuzzyCompare(l.y2(), secondCoords.second + step)) ||
+
+                (qFuzzyCompare(l.x1(), secondCoords.first + step) &&
+                 qFuzzyCompare(l.y1(), secondCoords.second + step) &&
+                 qFuzzyCompare(l.x2(), firstCoords.first + step) &&
+                 qFuzzyCompare(l.y2(), firstCoords.second + step)))
+            {
+                delete line;
+                break;
+            }
+        }
     }
 }
