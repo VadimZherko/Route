@@ -64,11 +64,6 @@ void ActionTable::addRow(QString action, int id, double x, double y)
     }
 
     model->insertRow(model->rowCount(), actionItem);
-
-    //model->setItem(row, 0, actionItem);
-
-    //proxyModel->invalidate();
-    //proxyModel->sort(1, Qt::AscendingOrder);
 }
 
 void ActionTable::saveInFile(QString filePath)
@@ -82,7 +77,6 @@ void ActionTable::saveInFile(QString filePath)
     }
 
     QTextStream out(&file);
-    //out << "label_id," << " x," << " y" << "\n";
 
     auto rowCount = model->rowCount();
 
@@ -90,12 +84,6 @@ void ActionTable::saveInFile(QString filePath)
     {
         out << model->item(i)->text() << '\n';
     }
-
-    /*(for(auto markItem : marks)
-    {
-        auto [x,y] = toCoords(markItem->scenePos().x(), markItem->scenePos().y());
-        out << markItem->getId() << ',' <<  x << ',' << y << '\n';
-    }*/
 
     file.close();
 }
@@ -120,19 +108,28 @@ void ActionTable::deleteAction()
         rows.append(i.row());
     }
 
-    qDebug() << *rows.end();
-
     std::sort(rows.begin(),rows.end(),std::greater<int>());
 
     for(auto i = rows.begin(); i != rows.end(); i++)
     {
-        qDebug() << "Цикл 1";
         if(!model->item(*i,0)->text().startsWith('M'))
         {
             model->removeRow(*i);
             continue;
         }
-        qDebug() << "Прошло первый if";
+
+        for(auto y = *i; y < this->model->rowCount(); y++)
+        {
+            qDebug() << *i << ' ' << this->model->rowCount() << ' ' << y;
+            auto row = model->item(y,0)->text();
+            if(row.startsWith('M'))
+            {
+                qDebug() << model->item(*i,0)->text() << "||" << model->item(y,0)->text();
+                auto rowSplited = model->item(*i,0)->text().split(' ');
+                auto rowTempSplited = row.split(' ');
+                emit delMoveSignal(rowSplited[1].toDouble(),rowSplited[2].toDouble(), rowTempSplited[1].toDouble(), rowTempSplited[2].toDouble());
+            }
+        }
 
         for(auto y = *i - 1; y >= 0; y--)
         {
@@ -143,31 +140,11 @@ void ActionTable::deleteAction()
                 auto rowSplited = model->item(*i,0)->text().split(' ');
                 auto rowTempSplited = row.split(' ');
                 emit delMoveSignal(rowSplited[1].toDouble(),rowSplited[2].toDouble(), rowTempSplited[1].toDouble(), rowTempSplited[2].toDouble());
+                model->removeRow(*i);
                 break;
             }
         }
-        qDebug() << "Прошло цикл";
 
         model->removeRow(*i);
     }
-
-    // ---------------------
-    /*for(auto i : rows)
-    {
-        auto row = model->item(i,0)->text();
-        if(row.startsWith('M'))
-        {
-            auto rowSplited = row.split(' ');
-            for(int i = 0; i < model->rowCount(); i++)
-            {
-                auto rowTemp = model->item(i,0)->text();
-                if(row.startsWith('M'))
-                {
-                    auto rowTempSplited = rowTemp.split(' ');
-                    emit delMoveSignal(rowSplited[1].toDouble(),rowSplited[2].toDouble(), rowTempSplited[1].toDouble(), rowTempSplited[2].toDouble());
-                    break;
-                }
-            }
-        }
-        model->removeRow(i);*/
 }

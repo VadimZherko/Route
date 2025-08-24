@@ -264,8 +264,24 @@ void Scene::loadTable(QString filePath)
 
     myString = in.readLine(100);
 
-    auto allItems = this->items();
+    while(!in.atEnd())
+    {
+        myString = in.readLine(100);
+        auto list = myString.split(',');
 
+        if(list.isEmpty())
+        {
+            showError("Error opening file");
+            return;
+        }
+        if(list.count() != 3)
+        {
+            showError("Error opening file");
+            return;
+        }
+    }
+
+    auto allItems = this->items();
     for(auto item : allItems)
     {
         if(Mark* markItem = qgraphicsitem_cast<Mark*>(item))
@@ -273,6 +289,9 @@ void Scene::loadTable(QString filePath)
             removeMark(markItem);
         }
     }
+    in.seek(1);
+    myString = in.readLine(100);
+
 
     while(!in.atEnd())
     {
