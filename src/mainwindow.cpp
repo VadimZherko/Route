@@ -29,8 +29,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tabWidget->removeTab(1);
     ui->tabWidget->removeTab(0);
 
-    ui->tabWidget->insertTab(0, markTable,"Marks");
-    ui->tabWidget->insertTab(1, actionTable,"Actions");
+    ui->tabWidget->insertTab(0, actionTable,"Actions");
+    ui->tabWidget->insertTab(1, markTable,"Labels");
 
     ui->tabWidget->resize(MARKTABLE_SIZE, windowHeight);
     ui->tabWidget->move(windowWidth - MARKTABLE_SIZE, 0);
@@ -62,6 +62,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->workArea->centerOn(-GRID_SIZE * SCENE_X_COEF + 600, GRID_SIZE * SCENE_HEIGHT_COEF - 2250);
 
     QObject::connect(scene,&Scene::markAction,this->actionTable,&ActionTable::addRow);
+    QObject::connect(dialogWidget, &Dialog::loadFilePath, this->actionTable, &ActionTable::loadFromTable);
+
+    QObject::connect(actionTable, &ActionTable::markFirst, this->scene, &Scene::makeMarkFirst);
+    QObject::connect(actionTable, &ActionTable::markNotFirst, this->scene, &Scene::makeMarkNotFirst);
 }
 
 MainWindow::~MainWindow()

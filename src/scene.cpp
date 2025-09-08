@@ -274,11 +274,6 @@ void Scene::loadTable(QString filePath)
             showError("Error opening file");
             return;
         }
-        if(list.count() != 3)
-        {
-            showError("Error opening file");
-            return;
-        }
     }
 
     auto allItems = this->items();
@@ -292,14 +287,19 @@ void Scene::loadTable(QString filePath)
     in.seek(1);
     myString = in.readLine(100);
 
-
     while(!in.atEnd())
     {
         myString = in.readLine(100);
         auto list = myString.split(',');
+        if (list.count() < 3)
+        {
+            showError("Error opening file");
+            break;
+        }
         addMark(list[1].toDouble(), list[2].toDouble(), list[0].toInt());
     }
 }
+
 
 void Scene::saveInFile(QString filePath)
 {
@@ -358,36 +358,29 @@ void Scene::moveLineAdd(double x1, double y1, double x2, double y2)
 
     auto firstCoords = toPixels(x1,y1);
     auto secondCoords = toPixels(x2,y2);
-    addLine(firstCoords.first + step, firstCoords.second + step, secondCoords.first + step, secondCoords.second + step, pen);
+
+    QPointF p1(firstCoords.first + step, firstCoords.second + step);
+    QPointF p2(secondCoords.first + step, secondCoords.second + step);
+
+    auto lineItem = addLine(QLineF(p1, p2), pen);
+
+    double angle = std::atan2(p2.y() - p1.y(), p2.x() - p1.x());
+
+    const double arrowSize = 10.0;
+    QPointF arrowP1 = p2 - QPointF(std::cos(angle - M_PI / 6) * arrowSize,
+                                   std::sin(angle - M_PI / 6) * arrowSize);
+    QPointF arrowP2 = p2 - QPointF(std::cos(angle + M_PI / 6) * arrowSize,
+                                   std::sin(angle + M_PI / 6) * arrowSize);
+
+    QPolygonF arrowHead;
+    arrowHead << p2 << arrowP1 << arrowP2;
+
+    auto arrowItem = addPolygon(arrowHead, pen, QBrush(color));
+
+    auto group = createItemGroup({lineItem, arrowItem});
+    group->setData(0, "arrow");
+    group->setData(1, QVariant::fromValue(QLineF(p1, p2)));
 }
-
-/*void Scene::moveLineDelete(double x1, double y1, double x2, double y2)
-{
-    auto firstCoords = toPixels(x1,y1);
-    auto secondCoords = toPixels(x2,y2);
-    auto step = MARK_SIZE / 2;
-
-    QPainterPath path;
-    path.moveTo(firstCoords.first + step, firstCoords.second + step);
-    path.lineTo(secondCoords.first + step, secondCoords.second + step);
-
-    auto temp = this->items(path, Qt::IntersectsItemShape);
-    for (auto i : temp)
-    {
-        if (auto item = qgraphicsitem_cast<QGraphicsLineItem*>(i))
-            delete item;
-    }
-
-
-
-    auto temp = this->items(firstCoords.first + step, firstCoords.second + step, secondCoords.first + step, secondCoords.second + step,
-                            Qt::IntersectsItemShape, Qt::AscendingOrder);
-    for(auto i : temp)
-    {
-        if(auto item = qgraphicsitem_cast<QGraphicsLineItem*>(i))
-        delete item;
-    }
-}*/
 
 void Scene::moveLineDelete(double x1, double y1, double x2, double y2)
 {
@@ -396,23 +389,45 @@ void Scene::moveLineDelete(double x1, double y1, double x2, double y2)
     auto firstCoords = toPixels(x1, y1);
     auto secondCoords = toPixels(x2, y2);
 
+    QPointF p1(firstCoords.first + step, firstCoords.second + step);
+    QPointF p2(secondCoords.first + step, secondCoords.second + step);
+
     for (auto item : items()) {
-        if (auto line = qgraphicsitem_cast<QGraphicsLineItem*>(item)) {
-            QLineF l = line->line();
+        if (item->data(0) == "arrow") {
+            QLineF storedLine = item->data(1).value<QLineF>();
 
-            if ((qFuzzyCompare(l.x1(), firstCoords.first + step) &&
-                 qFuzzyCompare(l.y1(), firstCoords.second + step) &&
-                 qFuzzyCompare(l.x2(), secondCoords.first + step) &&
-                 qFuzzyCompare(l.y2(), secondCoords.second + step)) ||
+            if ((qFuzzyCompare(storedLine.x1(), p1.x()) &&
+                 qFuzzyCompare(storedLine.y1(), p1.y()) &&
+                 qFuzzyCompare(storedLine.x2(), p2.x()) &&
+                 qFuzzyCompare(storedLine.y2(), p2.y())) ||
 
-                (qFuzzyCompare(l.x1(), secondCoords.first + step) &&
-                 qFuzzyCompare(l.y1(), secondCoords.second + step) &&
-                 qFuzzyCompare(l.x2(), firstCoords.first + step) &&
-                 qFuzzyCompare(l.y2(), firstCoords.second + step)))
+                (qFuzzyCompare(storedLine.x1(), p2.x()) &&
+                 qFuzzyCompare(storedLine.y1(), p2.y()) &&
+                 qFuzzyCompare(storedLine.x2(), p1.x()) &&
+                 qFuzzyCompare(storedLine.y2(), p1.y())))
             {
-                delete line;
+                delete item;
                 break;
             }
         }
     }
 }
+
+void Scene::makeMarkFirst(int id)
+{
+    auto items = this->items();
+
+    for(auto item : items)
+    {
+        if(Mark* markItem = qgraphicsitem_cast<Mark*>(item))
+        {
+            if (markItem->getId() == id) markItem->markIsFirst();
+        }
+    }
+}
+
+void Scene::makeMarkNotFirst(int id)
+{
+
+}
+

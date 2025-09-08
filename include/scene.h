@@ -80,6 +80,9 @@ public slots:
     void moveLineAdd(double, double, double, double);
     void moveLineDelete(double, double, double, double);
 
+    void makeMarkFirst(int);
+    void makeMarkNotFirst(int);
+
 signals:
     void markAdded(int, qreal, qreal);
     //void markUpdated(int, int);

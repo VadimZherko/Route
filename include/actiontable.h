@@ -32,11 +32,14 @@ private:
 public slots:
     void addRow(QString, int, double, double);
     void saveInFile(QString);
+    void loadFromTable();
     //void removeRow(int);
 
 signals:
     void moveSignal(double, double, double, double);
     void delMoveSignal(double, double, double, double);
+    void markFirst(int);
+    void markNotFirst(int);
 };
 
 #endif // ACTIONTABLE_H

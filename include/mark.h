@@ -15,12 +15,14 @@ public:
     Mark(int, double, double);
     void setId();
     int getId();
+    void markIsFirst();
+    void markIsNotFirst();
 
 private:
     double x;
     double y;
     int id;
-    bool isLifterUpped;
+    bool isFirst;
 
     QGraphicsTextItem* textItem;
     QPixmap QrImage;

@@ -42,12 +42,12 @@ void ActionTable::addRow(QString action, int id, double x, double y)
         QString actionTemp = "MOVE " + QString::number(x) + ' ' + QString::number(y) + ' ' + QString::number(id);
         actionItem = new QStandardItem(actionTemp);
     }
-    else if(action == "Lifter up/down 1")
+    else if(action == "Up")
     {
         QString actionTemp = "LIFTER 1 " + QString::number(id);
         actionItem = new QStandardItem(actionTemp);
     }
-    else if(action == "Lifter up/down 0")
+    else if(action == "Down")
     {
         QString actionTemp = "LIFTER 0 " + QString::number(id);
         actionItem = new QStandardItem(actionTemp);
@@ -55,6 +55,11 @@ void ActionTable::addRow(QString action, int id, double x, double y)
     else if(action == "0" || action == "1.57" || action == "-1.57" || action == "3.14" )
     {
         QString actionTemp = "ROTATE " + action + ' ' + QString::number(id);
+        actionItem = new QStandardItem(actionTemp);
+    }
+    else if(action == "Charge")
+    {
+        QString actionTemp = "CHARGE" + QString::number(x) + ' ' + QString::number(y) + ' ' + QString::number(id);
         actionItem = new QStandardItem(actionTemp);
     }
     else
@@ -88,6 +93,12 @@ void ActionTable::saveInFile(QString filePath)
     file.close();
 }
 
+void ActionTable::loadFromTable()
+{
+    this->selectAll();
+    deleteAction();
+}
+
 void ActionTable::contextMenuEvent(QContextMenuEvent* event)
 {
     auto typeClick = menu.exec(event->globalPos());
@@ -114,20 +125,21 @@ void ActionTable::deleteAction()
     {
         if(!model->item(*i,0)->text().startsWith('M'))
         {
+            auto rowTempSplited = model->item(*i,0)->text().split(' ');
+            emit markNotFirst(rowTempSplited[3].toInt());
             model->removeRow(*i);
             continue;
         }
 
         for(auto y = *i; y < this->model->rowCount(); y++)
         {
-            qDebug() << *i << ' ' << this->model->rowCount() << ' ' << y;
             auto row = model->item(y,0)->text();
             if(row.startsWith('M'))
             {
-                qDebug() << model->item(*i,0)->text() << "||" << model->item(y,0)->text();
                 auto rowSplited = model->item(*i,0)->text().split(' ');
                 auto rowTempSplited = row.split(' ');
                 emit delMoveSignal(rowSplited[1].toDouble(),rowSplited[2].toDouble(), rowTempSplited[1].toDouble(), rowTempSplited[2].toDouble());
+                emit markNotFirst(rowTempSplited[3].toInt());
             }
         }
 
@@ -136,11 +148,11 @@ void ActionTable::deleteAction()
             auto row = model->item(y,0)->text();
             if(row.startsWith('M'))
             {
-                qDebug() << model->item(*i,0)->text() << "||" << model->item(y,0)->text();
                 auto rowSplited = model->item(*i,0)->text().split(' ');
                 auto rowTempSplited = row.split(' ');
                 emit delMoveSignal(rowSplited[1].toDouble(),rowSplited[2].toDouble(), rowTempSplited[1].toDouble(), rowTempSplited[2].toDouble());
                 model->removeRow(*i);
+                emit markNotFirst(rowTempSplited[3].toInt());
                 break;
             }
         }
